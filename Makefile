@@ -3,7 +3,7 @@ PYTHON ?= $(shell if [ -f $(VENV_BIN)/python ]; then echo $(VENV_BIN)/python; el
 DBT ?= $(shell if [ -f $(VENV_BIN)/dbt ]; then echo $(VENV_BIN)/dbt; elif command -v dbt >/dev/null 2>&1; then echo dbt; else echo $(PYTHON) -m dbt.cli.main; fi)
 STREAMLIT ?= $(shell if [ -f $(VENV_BIN)/streamlit ]; then echo $(VENV_BIN)/streamlit; elif command -v streamlit >/dev/null 2>&1; then echo streamlit; else echo $(PYTHON) -m streamlit; fi)
 
-.PHONY: reset baseline tests gx dbt dashboard generate
+.PHONY: reset baseline tests gx dbt dashboard generate incident
 
 reset:
 	$(PYTHON) scripts/reset_lab.py
@@ -23,6 +23,9 @@ dbt:
 
 dashboard:
 	$(STREAMLIT) run dashboard/app.py
+
+incident:
+	$(PYTHON) scripts/triage_incident.py
 
 generate:
 	$(PYTHON) scripts/generate_data.py --rows 600 --days 42 --seed 27
